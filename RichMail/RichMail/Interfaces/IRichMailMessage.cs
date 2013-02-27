@@ -13,9 +13,5 @@ namespace RichMail.Interfaces
 		string Subject { get; }
 		string Boundary { get; }
 		string ContentType { get; }
-		IDictionary<string, string> Headers { get; }
-
-		IEnumerable<IRichMailMessageView> Views { get; }
-		IEnumerable<IRichMailAttachment> Attachments { get; }
 	}
 }

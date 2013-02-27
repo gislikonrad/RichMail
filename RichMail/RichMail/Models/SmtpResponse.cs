@@ -70,6 +70,7 @@ namespace RichMail.Models
 		public SmtpResponseCode Code { get; private set; }
 		public int CodeNumber { get; private set; }
 		public string Message { get; private set; }
+		public string Command { get; internal set; }
 		public override string ToString()
 		{
 			return _raw;

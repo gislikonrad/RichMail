@@ -39,21 +39,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\SimpleSmtpClientExtensions.cs" />
     <Compile Include="Implementations\TcpClientConnectionManager.cs" />
     <Compile Include="Interfaces\IConnectionManager.cs" />
-    <Compile Include="Interfaces\IHaveABoundary.cs" />
-    <Compile Include="Interfaces\IHaveAContentType.cs" />
-    <Compile Include="Interfaces\IHaveHeaders.cs" />
-    <Compile Include="Interfaces\IRichMailAttachment.cs" />
     <Compile Include="Interfaces\IRichMailMessage.cs" />
-    <Compile Include="Interfaces\IRichMailMessageView.cs" />
-    <Compile Include="Models\ContentType.cs" />
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\SmtpResponse.cs" />
-    <Compile Include="Models\ViewCollection.cs" />
-    <Compile Include="SmtpClient.cs" />
+    <Compile Include="SimpleSmtpClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\RichMailMessage.cs" />
     <Compile Include="Utilities\Base64.cs" />
     <Compile Include="Utilities\EmailDataGenerator.cs" />
   </ItemGroup>

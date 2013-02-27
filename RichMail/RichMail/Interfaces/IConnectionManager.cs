@@ -11,7 +11,7 @@ namespace RichMail.Interfaces
 	{
 		ConnectionState State { get; }
 
-		Task<SmtpResponse> Connect(string host, int port);
-		Task<SmtpResponse> ExecuteCommand(string command);
+		Task<SmtpResponse> ConnectAsync(string host, int port, bool useSsl);
+		Task<SmtpResponse> ExecuteCommandAsync(string command);
 	}
 }

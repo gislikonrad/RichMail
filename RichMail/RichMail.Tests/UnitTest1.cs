@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net;
+using System.Threading.Tasks;
+using System.Text;
 
 namespace RichMail.Tests
 {
@@ -10,13 +12,22 @@ namespace RichMail.Tests
 		[TestMethod]
 		public void TestMethod1()
 		{
-			using (var client = new SmtpClient(""))
+			SendAsync().Wait();
+		}
+
+		private async Task SendAsync()
+		{
+			using (var client = new SimpleSmtpClient(""))
 			{
-				var task = client.HeloAsync();
-				task.Wait();
-				var response = task.Result;
-				var t = client.SendAsync(null);
-				t.Wait();
+				await client.EhloAsync();
+				await client.MailFromAsync("");
+				await client.RcptToAsync("");
+				var builder = new StringBuilder();
+				builder.AppendLine("From: ");
+				builder.AppendLine("To: ");
+				builder.AppendLine("Subject: This is a raw email");
+				builder.AppendLine("This is the body.");
+				await client.DataAsync(builder.ToString());
 			}
 		}
 	}

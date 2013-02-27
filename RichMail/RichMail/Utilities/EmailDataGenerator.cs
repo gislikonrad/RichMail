@@ -16,6 +16,8 @@ namespace RichMail.Utilities
 		{
 			var globalBoundary = Guid.NewGuid().ToString();
 			var builder = new StringBuilder();
+
+			throw new NotImplementedException();
 		}
 	}
 }
