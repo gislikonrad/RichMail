@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{27D53BBD-1CE3-4706-AC80-979D602D85C1}</ProjectGuid>
+    <ProjectGuid>{6059DD55-BA55-4716-B9AC-DA334D5DECE8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RichMail.Tests</RootNamespace>
-    <AssemblyName>RichMail.Tests</AssemblyName>
+    <RootNamespace>HtmlMap.Tests</RootNamespace>
+    <AssemblyName>HtmlMap.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -50,13 +50,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTest1.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RichMail\RichMail.csproj">
-      <Project>{7da01d0f-bb5a-4a69-9936-f18f80228020}</Project>
-      <Name>RichMail</Name>
+    <ProjectReference Include="..\HtmlMap\HtmlMap.csproj">
+      <Project>{7f31f93d-acb9-4f70-95b1-7c82216553bc}</Project>
+      <Name>HtmlMap</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

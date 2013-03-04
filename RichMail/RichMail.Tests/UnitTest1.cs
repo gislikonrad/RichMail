@@ -1,34 +1,30 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Net;
-using System.Threading.Tasks;
 using System.Text;
+using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace RichMail.Tests
 {
+	/// <summary>
+	/// Summary description for UnitTest1
+	/// </summary>
 	[TestClass]
 	public class UnitTest1
 	{
 		[TestMethod]
 		public void TestMethod1()
 		{
-			SendAsync().Wait();
 		}
+	}
 
-		private async Task SendAsync()
+	public static class TaskExtensions
+	{
+		public static TResult WaitForResult<TResult>(this Task<TResult> task)
 		{
-			using (var client = new SimpleSmtpClient(""))
-			{
-				await client.EhloAsync();
-				await client.MailFromAsync("");
-				await client.RcptToAsync("");
-				var builder = new StringBuilder();
-				builder.AppendLine("From: ");
-				builder.AppendLine("To: ");
-				builder.AppendLine("Subject: This is a raw email");
-				builder.AppendLine("This is the body.");
-				await client.DataAsync(builder.ToString());
-			}
+			task.Wait();
+			return task.Result;
 		}
 	}
 }
