@@ -13,7 +13,6 @@ namespace RichMail.Utils
 	{
 		internal Stream ResponseStream { get; private set; }
 		internal string ContentType { get; private set; }
-		internal string Name { get; private set; }
 
 		internal static async Task<string> GetHtmlAsync(Uri url)
 		{
@@ -23,7 +22,6 @@ namespace RichMail.Utils
 
 		internal static async Task<WebContent> GetWebContentAsync(Uri url)
 		{
-			var name = url.ToString().Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries).Last();
 			var request = WebRequest.Create(url);
 			using (var response = await request.GetResponseAsync())
 			using (var stream = response.GetResponseStream())
@@ -34,8 +32,7 @@ namespace RichMail.Utils
 				return new WebContent
 				{
 					ResponseStream = copy,
-					ContentType = response.ContentType,
-					Name = name
+					ContentType = response.ContentType
 				};
 			}
 		}

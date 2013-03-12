@@ -7,25 +7,26 @@ using System.Threading.Tasks;
 
 namespace RichMail.Utils
 {
-	internal class ImageTag : ITag
+	internal class Image : ITag
 	{
 		internal string ContentId { get; private set; }
+		internal string ContentLink { get { return string.Format("cid:{0}", ContentId); } }
 		internal int SourcePosition { get; private set; }
 		internal int SourceLength { get; private set; }
 		internal string Source { get; private set; }
 		public int Position { get; private set; }
 		public int Length { get; private set; }
 		public string Text { get; private set; }
+		public string Name { get; set; }
 
-		internal static IEnumerable<ImageTag> Get(string html)
+		internal static IEnumerable<Image> Get(string html)
 		{
 			var imageRegex = new Regex(@"<img.*?/?>", RegexOptions.Singleline | RegexOptions.IgnoreCase);
 			var attributeRegex = new Regex("(src|alt)=\"(.*?)\"", RegexOptions.Singleline | RegexOptions.IgnoreCase);
 			foreach (var tagMatch in imageRegex.Matches(html).Cast<Match>())
 			{
-				var tag = new ImageTag
+				var tag = new Image
 				{
-					ContentId = tagMatch.Index.ToString(),
 					Length = tagMatch.Length,
 					Position = tagMatch.Index
 				};
@@ -39,12 +40,14 @@ namespace RichMail.Utils
 							tag.Source = value.Value;
 							tag.SourceLength = value.Length;
 							tag.SourcePosition = tagMatch.Index + value.Index;
+							tag.Name = value.Value.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries).Last();
 							break;
 						case "alt":
 							tag.Text = value.Value;
 							break;
 					}
 				}
+				tag.ContentId = tag.Name;
 				yield return tag;
 			}
 		}

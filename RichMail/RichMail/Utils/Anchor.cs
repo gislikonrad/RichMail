@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace RichMail.Utils
 {
-	internal class AnchorTag : ITag
+	internal class Anchor : ITag
 	{
 		internal string Href { get; private set; }
 		public int Position { get; private set; }
 		public int Length { get; private set; }
 		public string Text { get; private set; }
 
-		internal static IEnumerable<AnchorTag> Get(string html)
+		internal static IEnumerable<Anchor> Get(string html)
 		{
 			var anchorRegex = new Regex("<a.*?href=\"(.*?)\".*?>(.*?)</a>", RegexOptions.Singleline | RegexOptions.IgnoreCase);
 			foreach (var tagMatch in anchorRegex.Matches(html).Cast<Match>())
 			{
-				yield return new AnchorTag
+				yield return new Anchor
 				{
 					Href = tagMatch.Groups[1].Value,
 					Text = tagMatch.Groups[2].Value.Trim(),

@@ -16,23 +16,35 @@ namespace RichMail.Utils
 
 		internal ViewFactory(string html)
 		{
-			_tags = ImageTag.Get(html).Union<ITag>(AnchorTag.Get(html)).OrderByDescending(t => t.Position);
+			_tags = Image.Get(html).Union<ITag>(Anchor.Get(html)).OrderByDescending(t => t.Position);
 			_html = html;
 		}
 
 		public AlternateView CreatePlainTextAlternateView()
 		{
-			return AlternateView.CreateAlternateViewFromString(CreatePlainTextView(), null, "text/plain");
+			return CreateAlternateView(CreatePlainTextView(), "text/plain", TransferEncoding.QuotedPrintable);
 		}
 
-		public AlternateView CreateHtmlAlternateView()
+		public async Task<AlternateView> CreateHtmlAlternateView()
 		{
-			return AlternateView.CreateAlternateViewFromString(CreateHtmlView(), null, "text/html");
+			var view = CreateAlternateView(CreateHtmlView(), "text/html", TransferEncoding.QuotedPrintable);
+			foreach (var resource in await AttachmentFactory.CreateLinkedResourcesAsync(_tags.OfType<Image>()))
+			{
+				view.LinkedResources.Add(resource);
+			}
+			return view;
+		}
+
+		private AlternateView CreateAlternateView(string content, string contentType, TransferEncoding encoding = TransferEncoding.Base64)
+		{
+			var view = AlternateView.CreateAlternateViewFromString(content, null, contentType);
+			view.TransferEncoding = encoding;
+			return view;
 		}
 
 		public Task<IEnumerable<Attachment>> GetInlineImageAttachments()
 		{
-			return AttachmentFactory.CreateInlineImageAttachmentAsync(_tags.OfType<ImageTag>());
+			return AttachmentFactory.CreateInlineImageAttachmentAsync(_tags.OfType<Image>());
 		}
 
 		public string CreateHtmlView()
@@ -51,10 +63,10 @@ namespace RichMail.Utils
 			foreach (var tag in _tags)
 			{
 				var type = tag.GetType();
-				if (typeof(ImageTag).IsAssignableFrom(type))
-					copy = ReplaceImageTag(copy, (ImageTag)tag);
-				if (typeof(AnchorTag).IsAssignableFrom(type))
-					copy = ReplaceAnchorTag(copy, (AnchorTag)tag);
+				if (typeof(Image).IsAssignableFrom(type))
+					copy = ReplaceImageTag(copy, (Image)tag);
+				if (typeof(Anchor).IsAssignableFrom(type))
+					copy = ReplaceAnchorTag(copy, (Anchor)tag);
 			}
 
 			copy = ConvertToSingleLine(copy);
@@ -107,7 +119,7 @@ namespace RichMail.Utils
 			return regex.Replace(html, string.Empty);
 		}
 
-		private string ReplaceAnchorTag(string html, AnchorTag anchorTag)
+		private string ReplaceAnchorTag(string html, Anchor anchorTag)
 		{
 			var text = string.Format("{0} [{1}] ", anchorTag.Text, anchorTag.Href);
 			return html
@@ -115,7 +127,7 @@ namespace RichMail.Utils
 				.Insert(anchorTag.Position, text);
 		}
 
-		private string ReplaceImageTag(string html, ImageTag imageTag)
+		private string ReplaceImageTag(string html, Image imageTag)
 		{
 			var text = !string.IsNullOrWhiteSpace(imageTag.Text) ? imageTag.Text : "Inline image";
 			return html
@@ -126,11 +138,11 @@ namespace RichMail.Utils
 		private string GetHtmlWithContentIds(string html)
 		{
 			var copy = (string)html.Clone();
-			foreach (var imageTag in _tags.OfType<ImageTag>())
+			foreach (var imageTag in _tags.OfType<Image>())
 			{
 				copy = copy
 					.Remove(imageTag.SourcePosition, imageTag.SourceLength)
-					.Insert(imageTag.SourcePosition, string.Format("cid:{0}", imageTag.ContentId));
+					.Insert(imageTag.SourcePosition, imageTag.ContentLink);
 			}
 			return copy;
 		}
