@@ -47,6 +47,32 @@ namespace RichMail
 			return CreateMessage(to, new MailAddress(from), subject, html);
 		}
 
+		public static Task<MailMessage> CreateMessage(string to, MailAddress from, string subject, Uri url)
+		{
+			return CreateMessage(new[] { to }, from, subject, url);
+		}
+		public static async Task<MailMessage> CreateMessage(string[] to, MailAddress from, string subject, Uri url)
+		{
+			var html = await WebContent.GetHtmlAsync(url);
+			return await CreateMessage(to, from, subject, html);
+		}
+		public static Task<MailMessage> CreateMessage(string to, MailAddress from, string subject, string html)
+		{
+			return CreateMessage(new[] { to }, from, subject, html);
+		}
+
+		public static async Task<MailMessage> CreateMessage(string to, MailAddress from, Uri url)
+		{
+			var recipients = new[] { to };
+			return await CreateMessage(recipients, from, url);
+		}
+
+		public static async Task<MailMessage> CreateMessage(string[] to, MailAddress from, Uri url)
+		{
+			var html = await WebContent.GetHtmlAsync(url);
+			return await CreateMessage(to, from, html);
+		}
+
 		public static Task<MailMessage> CreateMessage(string[] to, MailAddress from, string html)
 		{
 			var subject = GetTitleFromHtml(html);
@@ -65,10 +91,6 @@ namespace RichMail
 			var viewFactory = new ViewFactory(html);
 			message.AlternateViews.Add(viewFactory.CreatePlainTextAlternateView());
 			message.AlternateViews.Add(await viewFactory.CreateHtmlAlternateView());
-			//foreach (var attachment in await viewFactory.GetInlineImageAttachments())
-			//{
-			//	message.Attachments.Add(attachment);
-			//}
 
 			return message;
 		}

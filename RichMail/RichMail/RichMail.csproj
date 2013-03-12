@@ -39,9 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Utils\AnchorTag.cs" />
+    <Compile Include="Utils\Anchor.cs" />
     <Compile Include="Utils\Generator.cs" />
-    <Compile Include="Utils\ImageTag.cs" />
+    <Compile Include="Utils\Image.cs" />
     <Compile Include="Utils\AttachmentFactory.cs" />
     <Compile Include="Utils\ITag.cs" />
     <Compile Include="Utils\ViewFactory.cs" />
